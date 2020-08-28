@@ -1,0 +1,6 @@
+.vscode
+*.pdf
+
+*.o
+edge
+edge.exe
