@@ -3,6 +3,9 @@
 
 #include <cstdlib>
 #include <cstdio>
+#include <iostream>
+#include <cstring>
+#include <cmath>
 
 #define EPS 1e-14
 
@@ -38,5 +41,12 @@ typedef struct Root_s {
     label n_edge;
     label n_vertex;
 } Root;
+
+typedef struct ColorTree_s {
+    label *colorTree;
+    label Delta;
+    label n_edge;
+    label n_vertex;
+} ColorTree;
 
 #endif

@@ -19,4 +19,4 @@ ${OBJS} : %.o : %.cpp ${HEADERS} Makefile
 	${CXX} -c $< -o $@
 
 clean :
-	rm -rf edge ${OBJS}
+	rm -rf ${EXE} ${OBJS}
