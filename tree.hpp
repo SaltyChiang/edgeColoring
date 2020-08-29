@@ -3,6 +3,6 @@
 
 #include "macro.h"
 
-Root *getRoot(Forest *forest, const label n_vertex);
+Root *getRoot(Forest *forest);
 
 #endif

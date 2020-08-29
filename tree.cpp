@@ -1,21 +1,21 @@
 #include <cstring>
 #include "tree.hpp"
 
-Root *getRoot(Forest *forest, const label n_vertex)
+Root *getRoot(Forest *forest)
 {
     label *forestIdx = forest->forestIdx;
     label Delta = forest->Delta;
+    label n_edge = forest->n_edge;
+    label n_vertex = forest->n_vertex;
 
     size_t bitmapCount = (n_vertex / 8 + 1) * sizeof(unsigned char);
     unsigned char *rowBitmap = static_malloc(unsigned char, bitmapCount);
     unsigned char *colBitmap = static_malloc(unsigned char, bitmapCount);
 
-    Root *root = static_malloc(Root, 1);
-    root->rootIdx = static_malloc(label, Delta + 1);
-    root->rootIdx[0] = 0;
-    root->Delta = Delta;
+    label *rootIdx = static_malloc(label, Delta + 1);
+    rootIdx[0] = 0;
     for (int i = 0; i < Delta; i++) {
-        root->rootIdx[i + 1] = root->rootIdx[i];
+        rootIdx[i + 1] = rootIdx[i];
 
         label n_leaf = forestIdx[i + 1] - forestIdx[i];
         if (n_leaf > 0) {
@@ -41,20 +41,27 @@ Root *getRoot(Forest *forest, const label n_vertex)
                     rootCnt += (int) charCnt;
                 }
             }
-            root->rootIdx[i + 1] += rootCnt;
+            rootIdx[i + 1] += rootCnt;
         }
     }
 
-    root->root = static_malloc(label, root->rootIdx[Delta]);
+    label *rootVal = static_malloc(label, rootIdx[Delta]);
     {
         int i = 0;
         for (int j = 0; j < n_vertex; j++) {
             if (colBitmap[j / 8] & (1 << (j % 8))) {
-                root->root[i] = j;
+                rootVal[i] = j;
                 i++;
             }
         }
     }
+
+    Root *root = static_malloc(Root, 1);
+    root->root = rootVal;
+    root->rootIdx = rootIdx;
+    root->Delta = Delta;
+    root->n_edge = n_edge;
+    root->n_vertex = n_vertex;
 
     free(rowBitmap);
     free(colBitmap);

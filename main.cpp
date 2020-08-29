@@ -19,9 +19,15 @@ int main(int argc, char *argv[])
     n_vertex = getVertexNum(row, col, n_edge);
     printf("n_edge: %d, n_vertex: %d\n", n_edge, n_vertex);
 
-    Forest *forest = getForest(row, col, n_edge, n_vertex);
+    Graph *graph = static_malloc(Graph, 1);
+    graph->row = row;
+    graph->col = col;
+    graph->n_edge = n_edge;
+    graph->n_vertex = n_vertex;
 
-    getRoot(forest, n_vertex);
+    Forest *forest = getForest(graph);
+
+    Root *root = getRoot(forest);
 
     return 0;
 }

@@ -1,7 +1,12 @@
 #include "forest.hpp"
 
-Forest *getForest(label *row, label *col, const label n_edge, const label n_vertex)
+Forest *getForest(Graph *graph)
 {
+    label *row = graph->row;
+    label *col = graph->col;
+    label n_edge = graph->n_edge;
+    label n_vertex = graph->n_vertex;
+
     label *parentCnt = static_calloc(label, n_vertex);
     label *childCnt = static_calloc(label, n_vertex);
 
@@ -52,6 +57,8 @@ Forest *getForest(label *row, label *col, const label n_edge, const label n_vert
     forest->col = colNew;
     forest->forestIdx = forestIdx;
     forest->Delta = Delta;
+    forest->n_edge = n_edge;
+    forest->n_vertex = n_vertex;
 
     free(parentCnt);
     free(childCnt);

@@ -15,17 +15,28 @@ typedef double scalar;
 #define static_calloc(_typename_, _count_)                                                         \
     static_cast<_typename_ *>(calloc(_count_, sizeof(_typename_)))
 
+typedef struct Graph_s {
+    label *row;
+    label *col;
+    label n_edge;
+    label n_vertex;
+} Graph;
+
 typedef struct Forest_s {
     label *row;
     label *col;
     label *forestIdx;
     label Delta;
+    label n_edge;
+    label n_vertex;
 } Forest;
 
 typedef struct Root_s {
     label *root;
     label *rootIdx;
     label Delta;
+    label n_edge;
+    label n_vertex;
 } Root;
 
 #endif

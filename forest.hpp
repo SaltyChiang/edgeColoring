@@ -3,6 +3,6 @@
 
 #include "macro.h"
 
-Forest *getForest(label *row, label *col, const label n_edge, const label n_vertex);
+Forest *getForest(Graph *graph);
 
 #endif
