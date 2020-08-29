@@ -2,6 +2,7 @@
 #include "readFile.hpp"
 #include "forest.hpp"
 #include "tree.hpp"
+#include "edge.hpp"
 
 // #define NONZERONUM 19800
 
@@ -27,13 +28,15 @@ int main(int argc, char *argv[])
 
     ColorTree *colorTree = getColorTree(forest, root);
 
-    for (int i = root->rootIdx[1]; i < root->rootIdx[2]; i++) {
+    ColorEdge *colorEdge = getColorEdge(forest, colorTree);
+
+    for (int i = root->rootIdx[0]; i < root->rootIdx[1]; i++) {
         printf("%d ", root->root[i]);
     }
     printf("\n");
 
     for (int i = forest->forestIdx[1]; i < forest->forestIdx[2]; i++) {
-        printf("%d %d %d\n", forest->row[i], forest->col[i], colorTree->colorTree[i]);
+        printf("%d %d %d\n", forest->row[i], forest->col[i], colorEdge->colorEdge[i]);
     }
 
     return 0;

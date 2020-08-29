@@ -37,16 +37,14 @@ typedef struct Forest_s {
 typedef struct Root_s {
     label *root;
     label *rootIdx;
-    label Delta;
-    label n_edge;
-    label n_vertex;
 } Root;
 
 typedef struct ColorTree_s {
     label *colorTree;
-    label Delta;
-    label n_edge;
-    label n_vertex;
 } ColorTree;
+
+typedef struct ColorEdge_s {
+    label *colorEdge;
+} ColorEdge;
 
 #endif

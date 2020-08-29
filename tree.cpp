@@ -3,6 +3,7 @@
 Root *getRoot(Forest *forestGraph)
 {
     label *forestIdx = forestGraph->forestIdx;
+
     label Delta = forestGraph->Delta;
     label n_edge = forestGraph->n_edge;
     label n_vertex = forestGraph->n_vertex;
@@ -67,9 +68,6 @@ Root *getRoot(Forest *forestGraph)
     Root *rootGraph = static_malloc(Root, 1);
     rootGraph->root = root;
     rootGraph->rootIdx = rootIdx;
-    rootGraph->Delta = Delta;
-    rootGraph->n_edge = n_edge;
-    rootGraph->n_vertex = n_vertex;
 
     free(rowBitmap);
     free(colBitmap);
@@ -171,9 +169,6 @@ ColorTree *getColorTree(Forest *forestGraph, Root *rootGraph)
 
     ColorTree *colorTreeGraph = static_malloc(ColorTree, 1);
     colorTreeGraph->colorTree = colorTree;
-    colorTreeGraph->Delta = Delta;
-    colorTreeGraph->n_edge = n_edge;
-    colorTreeGraph->n_vertex = n_vertex;
 
     free(parent);
     free(color);
