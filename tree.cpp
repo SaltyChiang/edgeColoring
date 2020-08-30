@@ -15,9 +15,19 @@ Root *getRoot(Forest *forestGraph)
     label **rootForest = static_malloc(label *, Delta);
     label *rootIdx = static_malloc(label, Delta + 1);
     rootIdx[0] = 0;
+
+    /***
+     * 按照森林循环
+     ***/
     for (int i_forest = 0; i_forest < Delta; i_forest++) {
         rootIdx[i_forest + 1] = rootIdx[i_forest];
 
+        /***
+         * 按照森林中的叶子循环
+         * 使用Bitmap统计在`col`队列但不在`row`队列中的节点
+         * 这些节点就是森林中的根
+         * 每个根对应一棵树
+         ***/
         label n_leaf = forestIdx[i_forest + 1] - forestIdx[i_forest];
         if (n_leaf > 0) {
             memset(rowBitmap, 0, bitmapCount * sizeof(unsigned char));
@@ -55,6 +65,10 @@ Root *getRoot(Forest *forestGraph)
         }
     }
 
+    /***
+     * 按照森林循环
+     * 将之前得到的根存储到一起，按照森林的顺序排列
+     ***/
     label *root = static_malloc(label, rootIdx[Delta]);
     for (int i_forest = 0; i_forest < Delta; i_forest++) {
         int n_leaf = forestIdx[i_forest + 1] - forestIdx[i_forest];
@@ -65,6 +79,9 @@ Root *getRoot(Forest *forestGraph)
         }
     }
 
+    /***
+     * 输出
+     ***/
     Root *rootGraph = static_malloc(Root, 1);
     rootGraph->root = root;
     rootGraph->rootIdx = rootIdx;
@@ -89,7 +106,14 @@ ColorTree *getColorTree(Forest *forestGraph, Root *rootGraph)
     label *colorOld = static_calloc(label, n_vertex);
     label *colorTree = static_malloc(label, n_edge);
 
+    /***
+     * 按照森林循环
+     ***/
     for (int i_forest = 0; i_forest < Delta; i_forest++) {
+
+        /***
+         * 按照森林中的叶子循环
+         ***/
         label n_leaf = forestIdx[i_forest + 1] - forestIdx[i_forest];
         if (n_leaf > 0) {
             label n_root = rootIdx[i_forest + 1] - rootIdx[i_forest];
@@ -108,6 +132,9 @@ ColorTree *getColorTree(Forest *forestGraph, Root *rootGraph)
                 colorOld[root[i_root]] = 0;
             }
 
+            /***
+             * 按照论文给出的算法将树填上6种颜色
+             ***/
             bool sixColor = false;
             while (!sixColor) {
                 sixColor = true;
@@ -136,6 +163,9 @@ ColorTree *getColorTree(Forest *forestGraph, Root *rootGraph)
                 color = colorTemp;
             }
 
+            /***
+             * 按照论文给出的算法将6种颜色缩减到3种颜色
+             ***/
             for (int i_over_color = 5; i_over_color >= 3; i_over_color--) {
                 for (int i_leaf = 0; i_leaf < n_leaf; i_leaf++) {
                     color[row[i_leaf]] = colorOld[col[i_leaf]];
@@ -160,6 +190,11 @@ ColorTree *getColorTree(Forest *forestGraph, Root *rootGraph)
                 color = colorTemp;
             }
 
+            /***
+             * 将树填色的结果存储
+             * 注意，这里按边存储
+             * 存储的是相应亲节点的颜色
+             ***/
             label *colorTreeLocal = colorTree + forestIdx[i_forest];
             for (int i_leaf = 0; i_leaf < n_leaf; i_leaf++) {
                 colorTreeLocal[i_leaf] = colorOld[col[i_leaf]];
@@ -167,6 +202,9 @@ ColorTree *getColorTree(Forest *forestGraph, Root *rootGraph)
         }
     }
 
+    /***
+     * 输出
+     ***/
     ColorTree *colorTreeGraph = static_malloc(ColorTree, 1);
     colorTreeGraph->colorTree = colorTree;
 

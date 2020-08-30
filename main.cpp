@@ -30,10 +30,14 @@ int main(int argc, char *argv[])
 
     ColorEdge *colorEdge = getColorEdge(forest, colorTree);
 
-    for (int i_forest = 0; i_forest < forest->Delta; i_forest++) {
-        for (int i = forest->forestIdx[i_forest]; i < forest->forestIdx[i_forest + 1]; i++) {
-            printf("%d %d %d\n", forest->row[i], forest->col[i], colorEdge->colorEdge[i]);
+    label *colorUsed = static_calloc(label, n_vertex);
+    for (int i_edge = 0; i_edge < n_edge; i_edge++) {
+        unsigned int colors = colorUsed[forest->row[i_edge]] | colorUsed[forest->row[i_edge]];
+        if ((1 << colorEdge->colorEdge[i_edge]) & (colors)) {
+            printf("NOOOOO!");
         }
+        colorUsed[forest->row[i_edge]] |= (1 << colorEdge->colorEdge[i_edge]);
+        colorUsed[forest->col[i_edge]] |= (1 << colorEdge->colorEdge[i_edge]);
     }
 
     return 0;

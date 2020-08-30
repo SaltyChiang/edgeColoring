@@ -12,7 +12,17 @@ ColorEdge *getColorEdge(Forest *forestGraph, ColorTree *colorTreeGraph)
 
     label *colorEdge = static_malloc(label, n_edge);
     label *colorUsed = static_calloc(label, n_vertex);
+
+    /***
+     * 按照森林循环
+     ***/
     for (int i_forest = 0; i_forest < Delta; i_forest++) {
+
+        /***
+         * 按照森林中的叶子循环
+         * 用Bitmap存储使用过的颜色
+         * TODO: 需要将Bitmap扩展，至少64位，或者根据实际情况判断
+         ***/
         label n_leaf = forestIdx[i_forest + 1] - forestIdx[i_forest];
         if (n_leaf > 0) {
             label *row = forestGraph->row + forestIdx[i_forest];
@@ -37,6 +47,9 @@ ColorEdge *getColorEdge(Forest *forestGraph, ColorTree *colorTreeGraph)
         }
     }
 
+    /***
+     * 输出
+     ***/
     ColorEdge *colorEdgeGraph = static_malloc(ColorEdge, 1);
     colorEdgeGraph->colorEdge = colorEdge;
 
