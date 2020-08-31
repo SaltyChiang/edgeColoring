@@ -4,5 +4,6 @@
 #include "macro.h"
 
 Forest *getForest(Graph *graph);
+Forest *getForestT(Graph *graph);
 
 #endif

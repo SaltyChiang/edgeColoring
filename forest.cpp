@@ -90,3 +90,72 @@ Forest *getForest(Graph *graph)
 
     return forest;
 }
+
+Forest *getForestT(Graph *graph)
+{
+    label *row = graph->row;
+    label *col = graph->col;
+    label n_edge = graph->n_edge;
+    label n_vertex = graph->n_vertex;
+
+    label *parentCnt = static_calloc(label, n_vertex);
+    label *childCnt = static_calloc(label, n_vertex);
+
+    for (int i_edge = 0; i_edge < n_edge; i_edge++) {
+        parentCnt[row[i_edge]]++;
+        childCnt[col[i_edge]]++;
+    }
+
+    int Delta = 0;
+    label *degree = static_calloc(label, n_vertex);
+    for (int i_vertex = 0; i_vertex < n_vertex; i_vertex++) {
+        degree[i_vertex] = parentCnt[i_vertex] + childCnt[i_vertex];
+        if (degree[i_vertex] > Delta)
+            Delta = degree[i_vertex];
+    }
+
+    label *forestCnt = static_calloc(label, n_vertex);
+    label *leafCnt = static_calloc(label, Delta);
+    for (int i_edge = 0; i_edge < n_edge; i_edge++) {
+        leafCnt[forestCnt[col[i_edge]]]++;
+        forestCnt[col[i_edge]]++;
+    }
+
+    label *forestIdx = static_malloc(label, Delta + 1);
+    label *forestPos = static_malloc(label, Delta);
+    forestIdx[0] = 0;
+    forestIdx[Delta] = n_edge;
+    forestPos[0] = 0;
+    for (int i_forest = 1; i_forest < Delta; i_forest++) {
+        forestIdx[i_forest] = forestIdx[i_forest - 1] + leafCnt[i_forest - 1];
+        forestPos[i_forest] = forestIdx[i_forest];
+    }
+
+    memset(forestCnt, 0, n_vertex * sizeof(label));
+    label *rowNew = static_malloc(label, n_edge);
+    label *colNew = static_malloc(label, n_edge);
+    for (int i_edge = 0; i_edge < n_edge; i_edge++) {
+        label i_forest = forestCnt[col[i_edge]];
+        rowNew[forestPos[i_forest]] = row[i_edge];
+        colNew[forestPos[i_forest]] = col[i_edge];
+        forestPos[i_forest]++;
+        forestCnt[col[i_edge]]++;
+    }
+
+    Forest *forest = static_malloc(Forest, 1);
+    forest->row = rowNew;
+    forest->col = colNew;
+    forest->forestIdx = forestIdx;
+    forest->Delta = Delta;
+    forest->n_edge = n_edge;
+    forest->n_vertex = n_vertex;
+
+    free(parentCnt);
+    free(childCnt);
+    free(degree);
+    free(forestCnt);
+    free(leafCnt);
+    free(forestPos);
+
+    return forest;
+}

@@ -4,5 +4,6 @@
 #include "macro.h"
 
 ColorEdge *getColorEdge(Forest *forestGraph, ColorTree *colorTreeGraph);
+ColorEdge *getColorEdgeT(Forest *forestGraph, ColorTree *colorTreeGraph);
 
 #endif

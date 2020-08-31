@@ -3,7 +3,9 @@
 
 #include "macro.h"
 
-Root *getRoot(Forest *forest);
-ColorTree *getColorTree(Forest *forest, Root *root);
+Root *getRoot(Forest *forestGraph);
+Root *getRootT(Forest *forestGraph);
+ColorTree *getColorTree(Forest *forestGraph, Root *rootGraph);
+ColorTree *getColorTreeT(Forest *forestGraph, Root *rootGraph);
 
 #endif
